@@ -6,8 +6,8 @@ import requests
 
 
 __author__ = 'Vadim Arsenev'
-__version__ = '0.9.3'
-__data__ = '28.08.2022'
+__version__ = '0.9.4'
+__data__ = '23.02.2023'
 
 
 class Parser(object):
@@ -48,10 +48,14 @@ class Parser(object):
         self.get_json()
         return self.data
 
-
     def parser_resultHtml(self):
         self.get_response()
         self.get_html()
+        return self.data
+
+    def parser_graphql_result(self):
+        self.get_graphql_response()
+        self.get_json()
         return self.data
 
 
@@ -64,4 +68,9 @@ class ParserPost(Parser):
     def get_response(self):
         """Connection to the site. Sending Post request"""
         self.response = requests.post(self.addUrl, data=self.payload)
+        self.response.encoding = 'utf-8'
+
+    def get_graphql_response(self):
+        """Connection to the site"""
+        self.response = requests.post(self.addUrl, json={'query': self.payload})
         self.response.encoding = 'utf-8'
